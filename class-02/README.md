@@ -276,26 +276,121 @@ console.log(multiply(4, 2));
 
 ---
 
-## 10. Basic DOM Example
+## 10. Advanced JavaScript Concepts
 
-The DOM lets JavaScript interact with HTML.
+Once the basics are clear, start using features that make code cleaner and more powerful.
 
-```html
-<button onclick="changeText()">Click Me</button>
-<p id="message">Hello</p>
+### Destructuring
 
-<script>
-  function changeText() {
-    document.getElementById("message").innerText = "Text changed!";
-  }
-</script>
+```js
+const student = { name: "Sara", age: 18, grade: "A" };
+const { name, grade } = student;
+
+console.log(name);
+console.log(grade);
 ```
 
 **Explanation:**
 
-- `document.getElementById()` selects an HTML element.
-- `innerText` changes the visible text.
-- `onclick` runs the function when the button is clicked.
+- Destructuring extracts values from objects in a short way.
+- It keeps code readable when working with structured data.
+
+### Array methods
+
+```js
+const numbers = [1, 2, 3, 4, 5];
+
+const doubled = numbers.map((num) => num * 2);
+const evenNumbers = numbers.filter((num) => num % 2 === 0);
+
+console.log(doubled);
+console.log(evenNumbers);
+```
+
+**Explanation:**
+
+- `map()` creates a new array by changing each item.
+- `filter()` creates a new array by keeping only matching items.
+
+### Promise example
+
+```js
+const fetchData = new Promise((resolve) => {
+  setTimeout(() => resolve("Data loaded"), 1000);
+});
+
+fetchData.then((message) => console.log(message));
+```
+
+**Explanation:**
+
+- Promises are used for async work.
+- They help handle operations that finish later.
+
+### `async` and `await`
+
+```js
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function loadData() {
+  await wait(1000);
+  console.log("Data loaded with async/await");
+}
+
+loadData();
+```
+
+**Explanation:**
+
+- `async` makes a function return a promise.
+- `await` pauses inside the function until the promise is resolved.
+
+### Scope and closures
+
+```js
+function outerFunction() {
+  let count = 0;
+
+  return function innerFunction() {
+    count++;
+    console.log(count);
+  };
+}
+
+const counter = outerFunction();
+counter();
+counter();
+```
+
+**Explanation:**
+
+- Scope controls where variables can be accessed.
+- A closure keeps access to variables from its outer function.
+
+### Classes
+
+```js
+class Student {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+
+  introduce() {
+    console.log(`My name is ${this.name} and I am ${this.age} years old.`);
+  }
+}
+
+const student = new Student("Ahsan", 20);
+student.introduce();
+```
+
+**Explanation:**
+
+- Classes are a cleaner way to create objects.
+- They help organize related data and behavior.
 
 ---
 
@@ -337,6 +432,7 @@ After learning basics, practice:
 - loops
 - functions
 - arrays and objects
-- DOM manipulation
+- destructuring and array methods
+- promises and async code
 
 This is the foundation for more advanced JavaScript topics.
