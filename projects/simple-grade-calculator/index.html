@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple Grade Calculator</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Simple Grade Calculator</h1>
+
+      <section class="card">
+        <h2>Add Student</h2>
+        <form id="student-form">
+          <div class="form-row">
+            <label for="name">Name</label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              placeholder="Ali"
+              required
+            />
+          </div>
+          <div class="form-row">
+            <label for="roll">Roll</label>
+            <input
+              id="roll"
+              name="roll"
+              type="number"
+              placeholder="101"
+              required
+            />
+          </div>
+          <div class="form-row">
+            <label for="section">Section</label>
+            <input
+              id="section"
+              name="section"
+              type="text"
+              placeholder="A"
+              required
+            />
+          </div>
+          <div class="form-row">
+            <label for="score1">Score 1</label>
+            <input
+              id="score1"
+              name="score1"
+              type="number"
+              min="0"
+              max="100"
+              placeholder="85"
+              required
+            />
+          </div>
+          <div class="form-row">
+            <label for="score2">Score 2</label>
+            <input
+              id="score2"
+              name="score2"
+              type="number"
+              min="0"
+              max="100"
+              placeholder="92"
+              required
+            />
+          </div>
+          <div class="form-row">
+            <label for="score3">Score 3</label>
+            <input
+              id="score3"
+              name="score3"
+              type="number"
+              min="0"
+              max="100"
+              placeholder="78"
+              required
+            />
+          </div>
+          <button type="submit">Add Student</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Student List</h2>
+        <ul id="student-list" class="student-list">
+          <li class="empty">No students added yet.</li>
+        </ul>
+        <button id="generate-report">Generate Report</button>
+      </section>
+
+      <section class="card">
+        <h2>Report</h2>
+        <div id="report-output" class="report-output">
+          <p>Use the form above to add students, then click Generate Report.</p>
+        </div>
+      </section>
+    </div>
+
+    <script src="index.js"></script>
+  </body>
+</html>

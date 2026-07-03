@@ -1,17 +1,15 @@
-const students = [
-  { name: "Ali", roll: 101, section: "A", scores: [85, 92, 78] },
-  { name: "Sara", roll: 102, section: "A", scores: [90, 88, 95] },
-  { name: "Usman", roll: 103, section: "B", scores: [70, 65, 80] },
-  { name: "Hina", roll: 104, section: "B", scores: [55, 60, 62] },
-];
+const studentForm = document.getElementById("student-form");
+const studentListElement = document.getElementById("student-list");
+const reportOutput = document.getElementById("report-output");
+const generateReportButton = document.getElementById("generate-report");
+
+const students = [];
 
 function calculateAverage(scores) {
   let total = 0;
-
   for (let i = 0; i < scores.length; i += 1) {
     total += scores[i];
   }
-
   return total / scores.length;
 }
 
@@ -28,7 +26,6 @@ function getGrade(average) {
   if (average >= 60) {
     return "D";
   }
-
   return "F";
 }
 
@@ -45,7 +42,6 @@ function getRemark(grade) {
   if (grade === "D") {
     return "Need more practice";
   }
-
   return "Try harder next time";
 }
 
@@ -65,15 +61,58 @@ function buildStudentReport(student) {
   };
 }
 
-function printStudentReport(report) {
-  console.log(`Name: ${report.name}`);
-  console.log(`Roll: ${report.roll}`);
-  console.log(`Section: ${report.section}`);
-  console.log(`Scores: ${report.scores.join(", ")}`);
-  console.log(`Average: ${report.average.toFixed(2)}`);
-  console.log(`Grade: ${report.grade}`);
-  console.log(`Remark: ${report.remark}`);
-  console.log("---");
+function updateStudentList() {
+  studentListElement.innerHTML = "";
+
+  if (students.length === 0) {
+    const empty = document.createElement("li");
+    empty.className = "empty";
+    empty.textContent = "No students added yet.";
+    studentListElement.appendChild(empty);
+    return;
+  }
+
+  for (let i = 0; i < students.length; i += 1) {
+    const item = document.createElement("li");
+    const current = students[i];
+    item.textContent = `${current.name} (Roll ${current.roll}, Section ${current.section})`;
+    studentListElement.appendChild(item);
+  }
+}
+
+function renderReport(reports) {
+  if (reports.length === 0) {
+    reportOutput.innerHTML = "<p>No report available. Add students first.</p>";
+    return;
+  }
+
+  let output = "";
+
+  for (let i = 0; i < reports.length; i += 1) {
+    const report = reports[i];
+    output += "<div class='report-item'>";
+    output += `<p><strong>Name:</strong> ${report.name}</p>`;
+    output += `<p><strong>Roll:</strong> ${report.roll}</p>`;
+    output += `<p><strong>Section:</strong> ${report.section}</p>`;
+    output += `<p><strong>Scores:</strong> ${report.scores.join(", ")}</p>`;
+    output += `<p><strong>Average:</strong> ${report.average.toFixed(2)}</p>`;
+    output += `<p><strong>Grade:</strong> ${report.grade}</p>`;
+    output += `<p><strong>Remark:</strong> ${report.remark}</p>`;
+    output += "</div>";
+  }
+
+  const summary = getClassSummary(reports);
+  output += "<div class='report-summary'>";
+  output += `<p><strong>Class Average:</strong> ${summary.classAverage.toFixed(2)}</p>`;
+
+  if (summary.topStudent) {
+    output += `<p><strong>Top Student:</strong> ${summary.topStudent.name} (Average: ${summary.topStudent.average.toFixed(2)})</p>`;
+  }
+
+  output += `<p><strong>Grade Counts:</strong> A: ${summary.gradeCounts.A}, B: ${summary.gradeCounts.B}, C: ${summary.gradeCounts.C}, D: ${summary.gradeCounts.D}, F: ${summary.gradeCounts.F}</p>`;
+  output += "</div>";
+
+  reportOutput.innerHTML = output;
 }
 
 function getClassSummary(reports) {
@@ -99,37 +138,71 @@ function getClassSummary(reports) {
   summary.classAverage = Number(
     (summary.totalAverage / reports.length).toFixed(2),
   );
-
   return summary;
 }
 
 function printClassSummary(summary) {
-  console.log(`Class Average: ${summary.classAverage.toFixed(2)}`);
+  let result = "<div class='report-summary'>";
+  result += `<p><strong>Class Average:</strong> ${summary.classAverage.toFixed(2)}</p>`;
 
   if (summary.topStudent) {
-    console.log(
-      `Top Student: ${summary.topStudent.name} (Average: ${summary.topStudent.average.toFixed(2)})`,
-    );
+    result += `<p><strong>Top Student:</strong> ${summary.topStudent.name} (Average: ${summary.topStudent.average.toFixed(2)})</p>`;
   }
 
-  console.log(
-    `Grade Counts: A: ${summary.gradeCounts.A}, B: ${summary.gradeCounts.B}, C: ${summary.gradeCounts.C}, D: ${summary.gradeCounts.D}, F: ${summary.gradeCounts.F}`,
-  );
+  result += `<p><strong>Grade Counts:</strong> A: ${summary.gradeCounts.A}, B: ${summary.gradeCounts.B}, C: ${summary.gradeCounts.C}, D: ${summary.gradeCounts.D}, F: ${summary.gradeCounts.F}</p>`;
+  result += "</div>";
+
+  reportOutput.innerHTML += result;
 }
 
-function runGradeReport(studentsList) {
+studentForm.addEventListener("submit", function (event) {
+  event.preventDefault();
+
+  const name = document.getElementById("name").value.trim();
+  const roll = Number(document.getElementById("roll").value);
+  const section = document.getElementById("section").value.trim();
+  const score1 = Number(document.getElementById("score1").value);
+  const score2 = Number(document.getElementById("score2").value);
+  const score3 = Number(document.getElementById("score3").value);
+
+  if (
+    !name ||
+    !section ||
+    Number.isNaN(roll) ||
+    Number.isNaN(score1) ||
+    Number.isNaN(score2) ||
+    Number.isNaN(score3)
+  ) {
+    alert("Please fill all fields with valid values.");
+    return;
+  }
+
+  const student = {
+    name,
+    roll,
+    section,
+    scores: [score1, score2, score3],
+  };
+
+  students.push(student);
+  updateStudentList();
+  studentForm.reset();
+  document.getElementById("name").focus();
+});
+
+generateReportButton.addEventListener("click", function () {
   const reports = [];
 
-  for (let i = 0; i < studentsList.length; i += 1) {
-    reports.push(buildStudentReport(studentsList[i]));
+  for (let i = 0; i < students.length; i += 1) {
+    reports.push(buildStudentReport(students[i]));
   }
 
-  for (let i = 0; i < reports.length; i += 1) {
-    printStudentReport(reports[i]);
+  renderReport(reports);
+
+  if (reports.length > 0) {
+    const summary = getClassSummary(reports);
+    printClassSummary(summary);
   }
+});
 
-  const classSummary = getClassSummary(reports);
-  printClassSummary(classSummary);
-}
-
-runGradeReport(students);
+updateStudentList();
